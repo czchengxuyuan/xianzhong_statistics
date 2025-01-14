@@ -1,0 +1,30 @@
+<!-- data/templates/data/admin_review_accidents.html -->
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<h2>待审核事故记录</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>事故地址</th>
+            <th>事故日期</th>
+            <th>事件类型</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for accident in accidents %}
+        <tr>
+            <td>{{ accident.address }}</td>
+            <td>{{ accident.accident_date }}</td>
+            <td>{{ accident.get_event_type_display }}</td>
+            <td>
+                <a href="{% url 'approve_accident' accident.id %}" class="btn btn-success">通过审核</a>
+                <a href="{% url 'reject_accident' accident.id %}" class="btn btn-danger">拒绝审核</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
