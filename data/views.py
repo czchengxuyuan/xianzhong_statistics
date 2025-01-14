@@ -26,6 +26,7 @@ def accident_list(request):
         accidents = Accident.objects.all()
     else:
         accidents = Accident.objects.filter(Q(created_by=request.user) & Q(is_approved=True) | Q(is_approved=False))
+    print(accidents)
     return render(request, 'data/accident_list.html', {'accidents': accidents})
 
 def is_admin(user):
@@ -34,6 +35,7 @@ def is_admin(user):
 @user_passes_test(is_admin)
 def admin_review_accident(request):
     accidents_to_review = Accident.objects.filter(is_approved=False)
+    print(accidents_to_review)
     return render(request, 'data/admin_review_accidents.html', {'accidents': accidents_to_review})
 
 @user_passes_test(is_admin)
@@ -48,3 +50,7 @@ def reject_accident(request, accident_id):
     accident = get_object_or_404(Accident, id=accident_id)
     accident.delete()
     return redirect('admin_review_accident')
+
+def accident_detail(request, accident_id):
+    accident = get_object_or_404(Accident, id=accident_id)
+    return render(request, 'data/accident_detail.html', {'accident': accident})

@@ -4,7 +4,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import get_user_model
 
-CustomUser = get_user_model()
 
 class CustomUserCreationForm(UserCreationForm):
     phone_number = forms.CharField(max_length=15, required=True)
@@ -12,7 +11,6 @@ class CustomUserCreationForm(UserCreationForm):
     is_staff = forms.BooleanField(required=False, initial=True, widget=forms.HiddenInput)
     is_superuser = forms.BooleanField(required=False, initial=True, widget=forms.HiddenInput)
     class Meta:
-        model = CustomUser
         fields = ('username', 'phone_number', 'address', 'password1', 'password2', 'is_staff', 'is_superuser')
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),

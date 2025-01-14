@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import CustomUserCreationForm
 from django.contrib.auth.views import LoginView
-
+from data.models import Accident 
 
 def register(request):
     if request.method == 'POST':
@@ -31,7 +31,9 @@ def redirect_after_login(request):
     
 @login_required
 def admin_dashboard(request):
-    return render(request, 'users/admin_dashboard.html')
+    accidents = Accident.objects.all()
+    print(accidents)
+    return render(request, 'users/admin_dashboard.html', {'accidents': accidents})
 
 @login_required
 def user_dashboard(request):
