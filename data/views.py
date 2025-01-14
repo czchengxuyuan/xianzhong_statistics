@@ -26,7 +26,6 @@ def accident_list(request):
         accidents = Accident.objects.all()
     else:
         accidents = Accident.objects.filter(Q(created_by=request.user) & Q(is_approved=True) | Q(is_approved=False))
-    print(accidents)
     return render(request, 'data/accident_list.html', {'accidents': accidents})
 
 def is_admin(user):
