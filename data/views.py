@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import AccidentForm
-from .models import Accident
+from .models import Accident, Message
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Q
 from django.contrib import messages
@@ -27,7 +27,36 @@ def accident_edit(request, accident_id):
     user = request.user
     accident = get_object_or_404(Accident, id=accident_id)
 
+    if accident.created_by != user and not user.is_staff:
+        return redirect('user_dashboard')
 
+    if request.method == 'POST':
+        form = AccidentForm(request.POST, instance=accident)
+        if form.is_valid():
+            form.save()
+            messages.success(request, '事故记录已成功更新！')
+            return redirect('user_dashboard')
+    else:
+        form = AccidentForm(instance=accident)
+    return render(request, 'data/accident_edit.html', {'form': form})
+
+@login_required
+def accident_delete_user(request, accident_id):
+    user = request.user
+    accident = get_object_or_404(Accident, id=accident_id)
+    if accident.created_by != user:
+        return redirect('user_dashboard')
+    else:
+        accident.delete()
+        messages.success(request, '事故记录已成功删除！')
+    return redirect('user_dashboard')
+
+@login_required
+def mark_message_as_read(request, message_id):
+    message = get_object_or_404(Message, id=message_id)
+    message.is_read = True
+    message.save()
+    return redirect('user_dashboard')
 
 @login_required
 def accident_list(request):
@@ -55,7 +84,7 @@ def approve_accident(request, accident_id):
 
         messages.success(request, 'Accident {accident.address} approved successfully.')
         user = accident.created_by
-        user.message_set.create(message=f"您的事故记录 '{accident.address}' 已审核通过")
+        Message.objects.create(user=user, content=f"您的事故记录' {accident.address}' 已审核通过")
 
     return redirect('admin_dashboard')
 
@@ -68,7 +97,7 @@ def reject_accident(request, accident_id):
 
         messages.success(request, 'Accident {accident.address} rejected successfully.')
         user = accident.created_by
-        user.message_set.create(message=f"您的事故记录 '{accident.address}' 已被拒绝")
+        Message.objects.create(user=user, content=f"您的事故记录' 已被拒绝")
 
     return redirect('admin_dashboard')
 
@@ -81,7 +110,7 @@ def delete_accident(request, accident_id):
 
         messages.success(request, 'Accident {accident.address} deleted successfully.')
         user = accident.created_by
-        user.message_set.create(message=f"您的事故记录 '{accident.address}' 已被删除")
+        Message.objects.create(user=user, content=f"您的事故记录' '{accident.address}' 已被删除")
 
     return redirect('admin_dashboard')
 

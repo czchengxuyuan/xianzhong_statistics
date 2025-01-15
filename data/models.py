@@ -24,3 +24,13 @@ class Accident(models.Model):
     
     def __str__(self):
         return f"事故：{self.address} - {self.accident_date}"
+    
+
+class Message(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="messages")
+    content = models.TextField()  # 消息内容
+    created_at = models.DateTimeField(auto_now_add=True)  # 消息创建时间
+    read = models.BooleanField(default=False)  # 消息是否已读
+
+    def __str__(self):
+        return f"Message to {self.user.username}: {self.content[:50]}..."

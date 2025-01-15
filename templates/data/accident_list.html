@@ -2,7 +2,7 @@
 
 {% block content %}
 <h2>事故记录列表</h2>
-
+<h3>欢迎, {{ user.username }}!</h3>
 <!-- 如果是管理员，显示所有事故 -->
 {% if user.is_staff %}
     <h4>查看所有事故记录</h4>

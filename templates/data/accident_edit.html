@@ -1,0 +1,16 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>编辑事故记录</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- 渲染表单字段 -->
+        <button type="submit" class="btn btn-primary">保存修改</button>
+    </form>
+
+    <br>
+    <a href="{% url 'user_dashboard' %}" class="btn btn-secondary">返回仪表盘</a>
+</div>
+{% endblock %}

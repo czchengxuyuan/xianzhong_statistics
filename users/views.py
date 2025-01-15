@@ -4,6 +4,11 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import CustomUserCreationForm
 from django.contrib.auth.views import LoginView
 from data.models import Accident 
+from data.forms import AccidentForm
+
+
+def is_admin(user):
+    return user.is_staff
 
 def register(request):
     if request.method == 'POST':
@@ -30,6 +35,7 @@ def redirect_after_login(request):
         return redirect('user_dashboard')
     
 @login_required
+@user_passes_test(is_admin)
 def admin_dashboard(request):
     accidents = Accident.objects.filter(is_deleted=False)
     return render(request, 'users/admin_dashboard.html', {'accidents': accidents})

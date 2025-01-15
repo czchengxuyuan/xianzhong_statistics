@@ -26,7 +26,11 @@
 
     <div class="container mt-4">
         <h1>管理员仪表盘</h1>
-
+        {% if not user.is_staff %}
+          <p>你没有权限访问此页面。</p>
+        {% else %}
+        <h3>欢迎, {{ user.username }}!</h3>
+        <h3>所有事故记录</h3>
         <!-- 为表格添加边框样式 -->
         <table class="table">
             <thead>
@@ -36,6 +40,7 @@
                     <th>事件类型</th>
                     <th>伤亡情况</th>
                     <th>视频链接</th>
+                    <th>提交人</th>
                     <th>状态</th>
                     <th>操作</th>
                 </tr>
@@ -53,6 +58,9 @@
                         </td>
                         <td>
                             <a href="{{ accident.video_link }}" target="_blank">查看视频</a>
+                        </td>
+                        <td>
+                          {{ accident.created_by }}<br>
                         </td>
                         <td>
                           {% if accident.is_approved %}
@@ -77,4 +85,5 @@
             </tbody>
         </table>
     </div>
+    {% endif %}
 {% endblock %}

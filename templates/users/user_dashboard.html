@@ -3,8 +3,15 @@
 {% block content %}
 <div class="container mt-4">
     <h2>用户仪表盘</h2>
-    
+    <h3>欢迎, {{ user.username }}!</h3>
     <!-- 如果用户提交了事故记录，则显示列表 -->
+    {% for message in user.messages.all %}
+        <div class="alert alert-info">
+            {{ message.content }}
+            <small class="text-muted">{{ message.created_at }}</small>
+            <a href="{% url 'mark_message_as_read' message.id %}">标记为已读</a>
+        </div>
+    {% endfor %}
     {% if accidents %}
         <table class="table table-bordered" style="border-collapse: collapse; width: 100%; border: 1px solid black;">
             <thead>
@@ -46,5 +53,7 @@
     {% else %}
         <p>您还没有提交任何事故记录。</p>
     {% endif %}
+    <h3>创建新的事故记录</h3>
+        <a href="{% url 'accident_create' %}" class="btn btn-primary">创建新事故</a>
 </div>
 {% endblock %}
