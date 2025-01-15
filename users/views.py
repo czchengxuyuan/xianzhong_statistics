@@ -31,13 +31,19 @@ def redirect_after_login(request):
     
 @login_required
 def admin_dashboard(request):
-    accidents = Accident.objects.all()
-    print(accidents)
+    accidents = Accident.objects.filter(is_deleted=False)
     return render(request, 'users/admin_dashboard.html', {'accidents': accidents})
 
 @login_required
 def user_dashboard(request):
-    return render(request, 'users/user_dashboard.html')
+    user = request.user
+    if user.is_staff:
+        accidents = Accident.objects.filter(is_deleted=False)
+    else:
+        # 否则显示当前用户提交的事故记录
+        accidents = Accident.objects.filter(created_by=user)
+
+    return render(request, 'users/user_dashboard.html', {'accidents': accidents})
 
 def is_superadmin(user):
     return user.is_superuser

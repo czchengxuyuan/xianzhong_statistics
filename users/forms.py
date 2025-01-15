@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import get_user_model
+from .models import CustomUser
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -10,7 +11,9 @@ class CustomUserCreationForm(UserCreationForm):
     address = forms.CharField(max_length=100, required=True)
     is_staff = forms.BooleanField(required=False, initial=True, widget=forms.HiddenInput)
     is_superuser = forms.BooleanField(required=False, initial=True, widget=forms.HiddenInput)
+    
     class Meta:
+        model =  CustomUser
         fields = ('username', 'phone_number', 'address', 'password1', 'password2', 'is_staff', 'is_superuser')
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),

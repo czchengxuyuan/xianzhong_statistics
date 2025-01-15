@@ -1,41 +1,80 @@
-<!-- users/templates/users/admin_dashboard.html -->
-{% extends "base_generic.html" %}
-
 {% block content %}
-<div class="container mt-4">
-    <h1>管理员仪表盘</h1>
+    <style>
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-  <table>
-    <thead>
-      <tr>
-        <th>事故地址</th>
-        <th>事故日期</th>
-        <th>事件类型</th>
-        <th>伤亡情况</th>
-        <th>视频链接</th>
-        <th>操作</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for accident in accidents %}
-        <tr>
-          <td>{{ accident.accident_address }}</td>
-          <td>{{ accident.accident_date }}</td>
-          <td>{{ accident.event_type }}</td>
-          <td>
-            受伤: {{ accident.injury_count }} 人<br>
-            死亡: {{ accident.death_count }} 人<br>
-            情况未知: {{ accident.unknown_status_count }} 人
-          </td>
-          <td>
-            <a href="{{ accident.video_link }}" target="_blank">查看视频</a>
-          </td>
-          <td>
-            <a href="#">编辑</a> | <a href="#">删除</a>
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
+        .table th, .table td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .table tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+
+    <div class="container mt-4">
+        <h1>管理员仪表盘</h1>
+
+        <!-- 为表格添加边框样式 -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>事故地址</th>
+                    <th>事故日期</th>
+                    <th>事件类型</th>
+                    <th>伤亡情况</th>
+                    <th>视频链接</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for accident in accidents %}
+                    <tr>
+                        <td>{{ accident.address }}</td>
+                        <td>{{ accident.accident_date }}</td>
+                        <td>{{ accident.accident_type }}</td>
+                        <td>
+                            受伤: {{ accident.injured|default:0 }} 人<br>
+                            死亡: {{ accident.dead|default:0 }} 人<br>
+                            情况未知: {{ accident.unknown|default:0 }} 人
+                        </td>
+                        <td>
+                            <a href="{{ accident.video_link }}" target="_blank">查看视频</a>
+                        </td>
+                        <td>
+                          {% if accident.is_approved %}
+                            <span class="badge bg-success">审核通过</span>
+                          {% else %}
+                            <span class="badge bg-warning">待审核</span>
+                          {% endif %}
+                        </td>
+                        <td>
+                          {% if not accident.is_approved %}
+                            <a href="{% url 'admin_approve_accident' accident.id %}" class="btn btn-success">审核通过</a>
+                            <a href="{% url 'admin_reject_accident' accident.id %}" class="btn btn-danger">审核拒绝</a>
+                          {% endif %}
+                            <a href="{% url 'admin_delete_accident' accident.id %}" class="btn btn-warning">删除</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                      <tr>
+                        <td colspan="7" class="text-center">没有待处理的事故记录。</td>
+                      </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

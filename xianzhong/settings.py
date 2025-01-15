@@ -130,3 +130,5 @@ LOGIN_REDIRECT_URL = '/redirect_after_login/'
 
 
 AUTH_USER_MODEL = 'users.CustomUser'
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
