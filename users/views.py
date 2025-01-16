@@ -37,6 +37,11 @@ def redirect_after_login(request):
 @login_required
 @user_passes_test(is_admin)
 def admin_dashboard(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    if not request.user.is_staff:
+        messages.error(request, "您没有访问管理员仪表盘的权限。")
+        return redirect('user_dashboard')
     accidents = Accident.objects.filter(is_deleted=False)
     return render(request, 'users/admin_dashboard.html', {'accidents': accidents})
 

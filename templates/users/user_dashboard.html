@@ -33,14 +33,14 @@
                         <td style="border: 1px solid black; padding: 8px;">
                             受伤: {{ accident.injured|default:0 }} 人<br>
                             死亡: {{ accident.dead|default:0 }} 人<br>
-                            情况未知: {{ accident.unknown|default:0 }} 人
+                            情况未知: {{ accident.unknown|default:0 }} 
                         </td>
                         <td style="border: 1px solid black; padding: 8px;">
                             <a href="{{ accident.video_link }}" target="_blank">查看视频</a>
                         </td>
                         <td style="border: 1px solid black; padding: 8px;">
                             <!-- 用户可以查看自己的事故详细信息 -->
-                            <a href="{% url 'accident_detail' accident.id %}" class="btn btn-info">查看详情</a>
+                            <a href="{% url 'accident_detail' accident.id %}?next={{ request.path }}" class="btn btn-info">查看详情</a>
                             <!-- 用户可以编辑自己的事故记录 -->
                             <a href="{% url 'accident_edit' accident.id %}" class="btn btn-warning">编辑</a>
                             <!-- 用户可以删除自己的事故记录 -->

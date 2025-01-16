@@ -1,0 +1,60 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h2>事故详细信息</h2>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>事故地址</th>
+            <td>{{ accident.address }}</td>
+        </tr>
+        <tr>
+            <th>事故日期</th>
+            <td>{{ accident.accident_date }}</td>
+        </tr>
+        <tr>
+            <th>事件类型</th>
+            <td>{{ accident.accident_type }}</td>
+        </tr>
+        <tr>
+            <th>伤亡情况</th>
+            <td>
+                受伤: {{ accident.injured|default:0 }} 人<br>
+                死亡: {{ accident.dead|default:0 }} 人<br>
+                情况未知: {{ accident.unknown }}
+            </td>
+        </tr>
+        <tr>
+            <th>视频链接</th>
+            <td>
+                <a href="{{ accident.video_link }}" target="_blank">点击查看视频</a>
+            </td>
+        </tr>
+        <tr>
+            <th>事故描述</th>
+            <td>{{ accident.description }}</td>
+        </tr>
+        <tr>
+            <th>提交人</th>
+            <td>{{ accident.created_by }}</td>
+        </tr>
+        <tr>
+            <th>审核状态</th>
+            <td>
+                {% if accident.is_approved %}
+                    <span class="badge bg-success">已审核</span>
+                {% else %}
+                    <span class="badge bg-warning">待审核</span>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+
+    {% if next %}
+        <a href="{{ next }}" class="btn btn-secondary">返回</a>
+    {% else %}
+        <a href="{% url 'accident_list' %}" class="btn btn-secondary">返回列表</a>
+    {% endif %}
+  </div>
+{% endblock %}

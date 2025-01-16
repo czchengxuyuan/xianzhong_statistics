@@ -38,7 +38,7 @@
             </td>
             <td style="border: 1px solid black; padding: 8px;">
                 <!-- 普通用户只能查看自己的事故详细信息 -->
-                <a href="{% url 'accident_detail' accident.id %}" class="btn btn-info">查看详情</a>
+                <a href="{% url 'accident_detail' accident.id %}?next={{ request.path }}" class="btn btn-info">查看详情</a>
 
                 <!-- 管理员可以审核事故 -->
                 {% if user.is_staff %}

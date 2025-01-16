@@ -1,29 +1,5 @@
+{% extends 'base_generic.html' %}
 {% block content %}
-    <style>
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .table th, .table td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-
-        .table th {
-            background-color: #f2f2f2;
-        }
-
-        .table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        .table tr:hover {
-            background-color: #f1f1f1;
-        }
-    </style>
-
     <div class="container mt-4">
         <h1>管理员仪表盘</h1>
         {% if not user.is_staff %}
@@ -43,6 +19,7 @@
                     <th>提交人</th>
                     <th>状态</th>
                     <th>操作</th>
+                    <th>查看详情</th>
                 </tr>
             </thead>
             <tbody>
@@ -76,6 +53,9 @@
                           {% endif %}
                             <a href="{% url 'admin_delete_accident' accident.id %}" class="btn btn-warning">删除</a>
                         </td>
+                        <td>
+                          <a href="{% url 'accident_detail' accident.id %}?next={{ request.path }}" class="btn btn-primary">查看详情</a>
+                        </td>
                     </tr>
                     {% empty %}
                       <tr>
@@ -84,6 +64,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        <a href="{% url 'admin_review_accident' %}" class="btn btn-warning">查看待审核事件</a>
     </div>
     {% endif %}
 {% endblock %}

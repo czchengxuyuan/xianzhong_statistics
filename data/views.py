@@ -72,7 +72,6 @@ def is_admin(user):
 @user_passes_test(is_admin)
 def admin_review_accident(request):
     accidents_to_review = Accident.objects.filter(is_approved=False)
-    print(accidents_to_review)
     return render(request, 'data/admin_review_accidents.html', {'accidents': accidents_to_review})
 
 @user_passes_test(is_admin)
@@ -116,4 +115,6 @@ def delete_accident(request, accident_id):
 
 def accident_detail(request, accident_id):
     accident = get_object_or_404(Accident, id=accident_id)
-    return render(request, 'data/accident_detail.html', {'accident': accident})
+    next_url = request.GET.get('next', None)
+
+    return render(request, 'data/accident_detail.html', {'accident': accident, 'next': next_url})
