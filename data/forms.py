@@ -9,3 +9,5 @@ class AccidentForm(forms.ModelForm):
         widgets = {
             'accident_date': forms.SelectDateWidget(years=range(2000, 2026)),
         }
+
+    address = forms.CharField(max_length=255, widget=forms.HiddenInput())

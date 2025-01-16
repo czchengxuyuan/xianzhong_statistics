@@ -1,13 +1,42 @@
 <!-- data/templates/data/create_accident.html -->
 {% extends 'base_generic.html' %}
-
+{% load static %}
 {% block content %}
 <h2>创建新的事故记录</h2>
 <h3>欢迎, {{ user.username }}!</h3>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">提交</button>
+    <div>
+        <fieldset>
+            <div style="display: flex; align-items: center;"></div>
+                <!--省份选择-->
+                <select id="prov" onchange="showCity(this)" style="margin-right: 10px;">
+                    <option value="">=请选择省份=</option>
+                </select>
+
+                <!--城市选择-->
+                <select id="city" onchange="showCountry(this)" style="margin-right: 10px;">
+                    <option value="">=请选择城市=</option>
+                </select>
+
+                <!--县区选择-->
+                <select id="country" onchange="selecCountry(this)" style="margin-right: 10px;">
+                    <option value="">=请选择县区=</option>
+                </select>
+                <button type="button" class="btn met1" onClick="showAddr()">确定</button>
+            </div>
+
+            <label for="addr-show">您选择的是：
+                <input type="text" value="" id="addr-show" style="margin-right: 10px;">
+            </label>
+            <br />
+        </fieldset>
+    </div>
+    <input type="hidden" id="address" name="address">
+    <button type="submit" class="btn sub">提交</button>
 </form>
-<a href="{% url 'user_dashboard' %}" class="btn btn-secondary">返回仪表盘</a>
+    <script src="{% static 'js/city.js' %}"></script>  <!-- 加载省市区数据 -->
+    <script src="{% static 'js/show.js' %}"></script>
+    <a href="{% url 'user_dashboard' %}" class="btn btn-secondary">返回仪表盘</a>
 {% endblock %}

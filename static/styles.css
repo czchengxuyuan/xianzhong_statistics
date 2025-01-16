@@ -21,3 +21,9 @@
 .table tr:hover {
     background-color: #f1f1f1;
 }
+
+/*方法一样式部分*/
+select {
+    width: 120px;
+    height: 30px;
+}

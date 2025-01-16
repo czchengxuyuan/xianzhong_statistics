@@ -32,13 +32,28 @@ def accident_edit(request, accident_id):
 
     if request.method == 'POST':
         form = AccidentForm(request.POST, instance=accident)
+        address = request.POST.get('address')  # 获取表单提交的地址
+        if address != accident.address:
+            accident.is_approved = False  # 如果地址有变化，则将is_approved设置为False
+            accident.address = address  # 更新地址
+            accident.save()  # 保存更新后的地址
         if form.is_valid():
             form.save()
             messages.success(request, '事故记录已成功更新！')
-            return redirect('user_dashboard')
+        return redirect('user_dashboard')
     else:
         form = AccidentForm(instance=accident)
-    return render(request, 'data/accident_edit.html', {'form': form})
+        address_parts = accident.address.split('-')
+        current_province = address_parts[0] if len(address_parts) > 0 else ''
+        current_city = address_parts[1] if len(address_parts) > 1 else ''
+        current_county = address_parts[2] if len(address_parts) > 2 else ''
+    return render(request, 'data/accident_edit.html', {
+            'form': form,
+            'accident': accident,
+            'current_province': current_province,
+            'current_city': current_city,
+            'current_county': current_county,
+        })
 
 @login_required
 def accident_delete_user(request, accident_id):

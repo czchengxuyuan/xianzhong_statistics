@@ -1,16 +1,66 @@
+<!-- data/templates/data/edit_accident.html -->
 {% extends 'base_generic.html' %}
-
+{% load static %}
 {% block content %}
-<div class="container mt-4">
-    <h2>编辑事故记录</h2>
+<h2>编辑事故记录</h2>
+<h3>欢迎, {{ user.username }}!</h3>
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}  <!-- 渲染表单字段 -->
-        <button type="submit" class="btn btn-primary">保存修改</button>
-    </form>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
 
-    <br>
-    <a href="{% url 'user_dashboard' %}" class="btn btn-secondary">返回仪表盘</a>
-</div>
+    <div>
+        <h4>当前地址: {{ accident.address }}</h4>  <!-- 显示当前事件的地址 -->
+        
+        <div id="address-edit" style="display: none;">
+            <fieldset>
+                <label for="prov">省：</label>
+                <select id="prov" onchange="showCity(this)">
+                    <option value="{{ current_province }}">{{ current_province }}</option>
+                    <option value="">=请选择省份=</option>
+                </select>
+
+                <label for="city">市：</label>
+                <select id="city" onchange="showCountry(this)">
+                    <option value="{{ current_city }}">{{ current_city }}</option>
+                    <option value="">=请选择城市=</option>
+                </select>
+
+                <label for="country">县：</label>
+                <select id="country" onchange="selecCountry(this)">
+                    <option value="{{ current_county }}">{{ current_county }}</option>
+                    <option value="">=请选择县区=</option>
+                </select>
+
+                <br>
+                <button type="button" class="btn met1" onClick="showAddr()">确定</button>
+            </fieldset>
+        </div>
+
+        <!-- 显示当前地址的文本框 -->
+        <label for="addr-show">您选择的地址：
+            <input type="text" value="{{ accident.address }}" id="addr-show" readonly>
+        </label>
+        
+        <br />
+        <!-- 隐藏字段传递修改后的地址 -->
+        <input type="hidden" id="address" name="address" value="{{ accident.address }}">
+        <button type="button" class="btn btn-warning" id="edit-btn">编辑地址</button> <!-- 编辑按钮 -->
+        <br />
+        <button type="submit" class="btn sub">提交</button>
+    </div>
+</form>
+
+<!-- 加载省市区数据和相关操作的JS文件 -->
+<script src="{% static 'js/city.js' %}"></script>
+<script src="{% static 'js/show.js' %}"></script>
+
+<a href="{% url 'user_dashboard' %}" class="btn btn-secondary">返回仪表盘</a>
+
+<script>
+    // 在点击“编辑地址”按钮时显示地址编辑选择框
+    document.getElementById("edit-btn").addEventListener("click", function() {
+        document.getElementById("address-edit").style.display = "block";
+    });
+</script>
 {% endblock %}
