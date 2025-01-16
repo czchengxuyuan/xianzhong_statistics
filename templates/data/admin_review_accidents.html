@@ -4,29 +4,36 @@
 {% block content %}
 
 <h2>待审核事故记录</h2>
-
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>事故地址</th>
-            <th>事故日期</th>
-            <th>事件类型</th>
-            <th>操作</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for accident in accidents %}
-        <tr>
-            <td>{{ accident.address }}</td>
-            <td>{{ accident.accident_date }}</td>
-            <td>{{ accident.accident_type }}</td>
-            <td>
-                <a href="{% url 'admin_approve_accident' accident.id %}" class="btn btn-success">通过审核</a>
-                <a href="{% url 'admin_reject_accident' accident.id %}" class="btn btn-danger">拒绝审核</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<h3>欢迎, {{ user.username }}!</h3>
+{% if accidents %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>事故地址</th>
+                <th>事故日期</th>
+                <th>事件类型</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for accident in accidents %}
+            <tr>
+                <td>{{ accident.address }}</td>
+                <td>{{ accident.accident_date }}</td>
+                <td>{{ accident.accident_type }}</td>
+                <td>
+                    <a href="{% url 'admin_approve_accident' accident.id %}" class="btn btn-success">通过审核</a>
+                    <a href="{% url 'admin_reject_accident' accident.id %}" class="btn btn-danger">拒绝审核</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <!-- 如果没有事故记录，显示提示信息 -->
+        <div class="alert alert-info">
+            当前无事故需要处理。
+        </div>
+    {% endif %}
 <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">返回仪表盘</a>
 {% endblock %}

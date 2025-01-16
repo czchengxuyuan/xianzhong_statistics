@@ -3,9 +3,11 @@
 
 {% block content %}
 <h2>创建新的事故记录</h2>
+<h3>欢迎, {{ user.username }}!</h3>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn btn-primary">提交</button>
 </form>
+<a href="{% url 'user_dashboard' %}" class="btn btn-secondary">返回仪表盘</a>
 {% endblock %}

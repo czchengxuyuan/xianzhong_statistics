@@ -3,9 +3,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import CustomUserCreationForm
 from django.contrib.auth.views import LoginView
-from data.models import Accident 
+from data.models import Accident, Message
 from data.forms import AccidentForm
-
 
 def is_admin(user):
     return user.is_staff
@@ -53,8 +52,8 @@ def user_dashboard(request):
     else:
         # 否则显示当前用户提交的事故记录
         accidents = Accident.objects.filter(created_by=user)
-
-    return render(request, 'users/user_dashboard.html', {'accidents': accidents})
+    unread_messages = Message.objects.filter(user=user, read=False)
+    return render(request, 'users/user_dashboard.html', {'accidents': accidents, 'unread_messages': unread_messages})
 
 def is_superadmin(user):
     return user.is_superuser

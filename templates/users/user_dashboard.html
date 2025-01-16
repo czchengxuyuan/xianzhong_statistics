@@ -5,12 +5,14 @@
     <h2>用户仪表盘</h2>
     <h3>欢迎, {{ user.username }}!</h3>
     <!-- 如果用户提交了事故记录，则显示列表 -->
-    {% for message in user.messages.all %}
+    {% for message in unread_messages %}
         <div class="alert alert-info">
             {{ message.content }}
             <small class="text-muted">{{ message.created_at }}</small>
             <a href="{% url 'mark_message_as_read' message.id %}">标记为已读</a>
         </div>
+    {% empty %}
+        <p>没有新的消息。</p>
     {% endfor %}
     {% if accidents %}
         <table class="table table-bordered" style="border-collapse: collapse; width: 100%; border: 1px solid black;">

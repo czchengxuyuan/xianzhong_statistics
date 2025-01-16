@@ -54,8 +54,9 @@ def accident_delete_user(request, accident_id):
 @login_required
 def mark_message_as_read(request, message_id):
     message = get_object_or_404(Message, id=message_id)
-    message.is_read = True
-    message.save()
+    if not message.read and message.user == request.user:
+        message.read = True
+        message.save()
     return redirect('user_dashboard')
 
 @login_required
@@ -81,9 +82,9 @@ def approve_accident(request, accident_id):
         accident.is_approved = True
         accident.save()
 
-        messages.success(request, 'Accident {accident.address} approved successfully.')
+        messages.success(request, f'Accident {accident.address}-{accident.accident_type} approved successfully.')
         user = accident.created_by
-        Message.objects.create(user=user, content=f"您的事故记录' {accident.address}' 已审核通过")
+        Message.objects.create(user=user, content=f"您的事故记录' {accident.address}-{accident.accident_type}' 已审核通过")
 
     return redirect('admin_dashboard')
 
@@ -94,9 +95,9 @@ def reject_accident(request, accident_id):
         accident.is_approved = False
         accident.save()
 
-        messages.success(request, 'Accident {accident.address} rejected successfully.')
+        messages.success(request, f'Accident {accident.address}-{accident.accident_type} rejected successfully.')
         user = accident.created_by
-        Message.objects.create(user=user, content=f"您的事故记录' 已被拒绝")
+        Message.objects.create(user=user, content=f"您的事故记录'{accident.address}-{accident.accident_type} ' 已被拒绝")
 
     return redirect('admin_dashboard')
 
@@ -107,9 +108,9 @@ def delete_accident(request, accident_id):
         accident.is_deleted = True
         accident.save()
 
-        messages.success(request, 'Accident {accident.address} deleted successfully.')
+        messages.success(request, 'Accident {accident.address}-{accident.accident_type} deleted successfully.')
         user = accident.created_by
-        Message.objects.create(user=user, content=f"您的事故记录' '{accident.address}' 已被删除")
+        Message.objects.create(user=user, content=f"您的事故记录' '{accident.address}-{accident.accident_type}' 已被删除")
 
     return redirect('admin_dashboard')
 

@@ -10,8 +10,8 @@ class Accident(models.Model):
     accident_date = models.DateField()
     description = models.TextField()
     accident_type = models.CharField(max_length=200)
-    injured = models.IntegerField(default=0)
-    dead = models.IntegerField(default=0)
+    injured = models.PositiveIntegerField(default=0)
+    dead = models.PositiveIntegerField(default=0)
     unknown = models.CharField(max_length=200, default='情况未知')
     
     latitude = models.FloatField(default=0.0)
