@@ -24,10 +24,6 @@ def register(request):
         form = CustomUserCreationForm()
     return render(request, 'users/register.html', {'form': form})
 
-@login_required
-def profile(request):
-    return render(request, 'users/profile.html')
-
 def redirect_after_login(request):
     if request.user.is_admin:
         return redirect('admin_dashboard')
