@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container mt-4">
     <h2>用户仪表盘</h2>
-    <h3>欢迎, {{ user.username }}!</h3>
+    <h3><a href="{% url 'user_detail' user.id %}">欢迎：{{ user.username }}！</a></h3>
     <!-- 如果用户提交了事故记录，则显示列表 -->
     {% for message in unread_messages %}
         <div class="alert alert-info">

@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import CustomUserCreationForm
 from django.contrib.auth.views import LoginView
 from data.models import Accident, Message
 from data.forms import AccidentForm
+from .models import CustomUser
 
 def is_admin(user):
     return user.is_staff
@@ -70,3 +71,9 @@ def register_admin(request):
     else:
         form = CustomUserCreationForm()
     return render(request, 'users/register_admin.html', {'form': form})
+
+@login_required
+def user_detail(request, user_id):
+    user = get_object_or_404(CustomUser, id=user_id)
+    previous_url = request.META.get('HTTP_REFERER', 'default_url')
+    return render(request, 'users/user_detail.html', {'user': user, 'previous_url': previous_url})
