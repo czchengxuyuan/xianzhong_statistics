@@ -1,10 +1,50 @@
 {% extends 'base_generic.html' %}
 
 {% block content %}
-  <div class="container mt-4">
+  <style>
+    /* 样式自定义 */
+    .container {
+      padding: 30px;
+    }
+
+    .table {
+      width: 100%;
+      font-size: 1.1rem;
+      border-radius: 10px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .table th, .table td {
+      padding: 12px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      font-size: 1.1rem;
+    }
+
+    .btn-info {
+      background-color: #17a2b8;
+      color: white;
+    }
+
+    .btn-info:hover {
+      background-color: #138496;
+    }
+
+    .badge {
+      font-size: 1rem;
+    }
+
+    .shadow-sm {
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+
+  <div class="container mt-4 p-4">
     <h2>事故详细信息</h2>
 
-    <table class="table table-bordered">
+    <table class="table table-bordered table-striped table-hover shadow-sm rounded">
         <tr>
             <th>事故地址</th>
             <td>{{ accident.address }}</td>
@@ -22,13 +62,13 @@
             <td>
                 受伤: {{ accident.injured|default:0 }} 人<br>
                 死亡: {{ accident.dead|default:0 }} 人<br>
-                情况未知: {{ accident.unknown }}
+                情况未知: {{ accident.unknown|default:0 }} 人
             </td>
         </tr>
         <tr>
             <th>视频链接</th>
             <td>
-                <a href="{{ accident.video_link }}" target="_blank">点击查看视频</a>
+                <a href="{{ accident.video_link }}" target="_blank" class="btn btn-info btn-sm">点击查看视频</a>
             </td>
         </tr>
         <tr>
@@ -52,9 +92,9 @@
     </table>
 
     {% if next %}
-        <a href="{{ next }}" class="btn btn-secondary">返回</a>
+        <a href="{{ next }}" class="btn btn-secondary btn-lg mt-3">返回</a>
     {% else %}
-        <a href="{% url 'accident_list' %}" class="btn btn-secondary">返回列表</a>
+        <a href="{% url 'accident_list' %}" class="btn btn-secondary btn-lg mt-3">返回列表</a>
     {% endif %}
   </div>
 {% endblock %}

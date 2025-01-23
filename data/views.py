@@ -80,7 +80,8 @@ def accident_list(request):
         accidents = Accident.objects.all()
     else:
         accidents = Accident.objects.filter(Q(created_by=request.user) & Q(is_approved=True) | Q(is_approved=False))
-    return render(request, 'data/accident_list.html', {'accidents': accidents})
+    next = request.GET.get('next', None)
+    return render(request, 'data/accident_list.html', {'accidents': accidents, 'next': next})
 
 def is_admin(user):
     return user.is_staff

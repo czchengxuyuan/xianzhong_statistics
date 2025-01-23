@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.auth.views import LoginView
 from data.models import Accident, Message
 from data.forms import AccidentForm
@@ -73,3 +73,18 @@ def user_detail(request, user_id):
     user = get_object_or_404(CustomUser, id=user_id)
     previous_url = request.META.get('HTTP_REFERER', 'default_url')
     return render(request, 'users/user_detail.html', {'user': user, 'previous_url': previous_url})
+
+@login_required
+def edit_user(request):
+    user = request.user
+
+    if request.method == 'POST':
+        form = CustomUserChangeForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile has been updated.')
+            return redirect('user_dashboard')
+    else:
+        form = CustomUserChangeForm(instance=user)
+
+    return render(request, 'users/edit_user.html', {'form': form})

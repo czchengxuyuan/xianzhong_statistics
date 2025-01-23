@@ -1,9 +1,37 @@
 {% extends 'base_generic.html' %}
 
 {% block content %}
+<style>
+    /* 样式自定义 */
+    .header {
+      display: flex; /* 使用 Flexbox 来排列元素 */
+      justify-content: space-between; /* 将第一个元素放在左边，后两个元素放在右边 */
+      align-items: center; /* 垂直居中对齐元素 */
+      margin-bottom: 20px; /* 给这部分元素添加底部间距 */
+    }
+
+    .header .btn {
+      margin-left: 10px; /* 为按钮之间添加间距 */
+    }
+
+    /* 让按钮不挤在一起 */
+    .header a {
+      text-decoration: none;
+    }
+  </style>
 <div class="container mt-4">
+
     <h2>用户仪表盘</h2>
-    <h3><a href="{% url 'user_detail' user.id %}">欢迎：{{ user.username }}！</a></h3>
+    <div class="header">
+        <h3><a href="{% url 'user_detail' user.id %}">欢迎：{{ user.username }}！</a></h3>
+        
+        <!-- Wrap buttons in a div with some margin between them -->
+        <div class="d-flex justify-content-end">
+            <a href="{% url 'accident_list' %}?next={{ request.path }}" class="btn btn-primary mr-3">查看历史事件</a> <!-- Added margin-right -->
+            <a href="{% url 'edit_user' %}" class="btn btn-info">编辑用户信息</a>
+        </div>
+    </div>
+    
     <!-- 如果用户提交了事故记录，则显示列表 -->
     {% for message in unread_messages %}
         <div class="alert alert-info">
@@ -56,6 +84,6 @@
         <p>您还没有提交任何事故记录。</p>
     {% endif %}
     <h3>创建新的事故记录</h3>
-        <a href="{% url 'accident_create' %}" class="btn btn-primary">创建新事故</a>
+    <a href="{% url 'accident_create' %}" class="btn btn-primary">创建新事故</a>
 </div>
 {% endblock %}

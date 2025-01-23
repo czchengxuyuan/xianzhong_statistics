@@ -1,14 +1,85 @@
 <!-- users/user_detail.html -->
 {% extends 'base_generic.html' %}
-{% load static %}
 {% block content %}
-<h2>用户详情</h2>
+<style>
+    /* 设置整体页面的背景和内边距 */
+    .user-detail-container {
+        max-width: 900px; /* 限制最大宽度 */
+        margin: 20px auto; /* 页面居中 */
+        padding: 20px; /* 内边距，避免元素紧贴边缘 */
+        background-color: #f9f9f9; /* 背景颜色 */
+        border-radius: 10px; /* 圆角效果 */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+    }
 
-<p>用户名: {{ user.username }}</p>
-<p>邮箱: {{ user.email }}</p>
-<p>注册时间: {{ user.date_joined }}</p>
-<p>最后登录时间: {{ user.last_login }}</p>
+    /* 标题样式 */
+    .user-detail-container h1 {
+        font-size: 32px;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    /* 用户详情信息 */
+    .user-info {
+        margin-bottom: 20px;
+    }
+
+    /* 单条信息样式 */
+    .user-info label {
+        font-weight: bold;
+        color: #555;
+    }
+
+    .user-info p {
+        font-size: 16px;
+        color: #666;
+        margin: 5px 0;
+    }
+
+    /* 提交按钮样式 */
+    .btn-submit {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .btn-submit:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<div class="user-detail-container">
+<h2>用户详情</h2>
+<div class="user-info">
+    <label>用户名：</label>
+    <p>{{ user.username }}</p>
+</div>
+
+<div class="user-info">
+    <label>电话：</label>
+    <p>{{ user.phone_number }}</p>
+</div>
+
+<div class="user-info">
+    <label>地址：</label>
+    <p>{{ user.address }}</p>
+</div>
+
+<div class="user-info">
+    <label>注册时间：</label>
+    <p>{{ user.date_joined }}</p>
+</div>
+
+<div class="user-info">
+    <label>最后登录时间：</label>
+    <p>{{ user.last_login }}</p>
+</div>
 
 <!-- 可以根据需要添加其他用户信息 -->
 <a href="{{ previous_url }}" class="btn btn-secondary">返回</a>
+</div>
 {% endblock %}

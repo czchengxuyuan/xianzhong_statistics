@@ -1,11 +1,35 @@
 {% extends 'base_generic.html' %}
 {% block content %}
+    <style>
+      /* 样式自定义 */
+      .header {
+        display: flex; /* 使用 Flexbox 来排列元素 */
+        justify-content: space-between; /* 将第一个元素放在左边，后两个元素放在右边 */
+        align-items: center; /* 垂直居中对齐元素 */
+        margin-bottom: 20px; /* 给这部分元素添加底部间距 */
+      }
+
+      .header .btn {
+        margin-left: 10px; /* 为按钮之间添加间距 */
+      }
+
+      /* 让按钮不挤在一起 */
+      .header a {
+        text-decoration: none;
+      }
+    </style>
     <div class="container mt-4">
         <h1>管理员仪表盘</h1>
         {% if not user.is_staff %}
           <p>你没有权限访问此页面。</p>
         {% else %}
-        <h3><a href="{% url 'user_detail' user.id %}">欢迎：{{ user.username }}！</a></h3>
+        <div class="header">
+          <h3><a href="{% url 'user_detail' user.id %}">欢迎：{{ user.username }}！</a></h3>
+          <div>
+            <a href="{% url 'admin_review_accident' %}" class="btn btn-warning">查看待审核事件</a>
+            <a href="{% url 'accident_list' %}?next={{ request.path }}" class="btn btn-primary">查看历史事件</a>
+          </div>
+        </div>
         <h3>所有事故记录</h3>
         <!-- 为表格添加边框样式 -->
         <table class="table">
@@ -31,7 +55,7 @@
                         <td>
                             受伤: {{ accident.injured|default:0 }} 人<br>
                             死亡: {{ accident.dead|default:0 }} 人<br>
-                            情况未知: {{ accident.unknown|default:0 }} 人
+                            情况未知: {{ accident.unknown|default:0 }}
                         </td>
                         <td>
                             <a href="{{ accident.video_link }}" target="_blank">查看视频</a>
@@ -64,7 +88,7 @@
                 {% endfor %}
             </tbody>
         </table>
-        <a href="{% url 'admin_review_accident' %}" class="btn btn-warning">查看待审核事件</a>
+
     </div>
     {% endif %}
 {% endblock %}

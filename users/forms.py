@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import get_user_model
 from .models import CustomUser
+from django.contrib.auth.forms import UserChangeForm
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -29,6 +30,23 @@ class CustomUserCreationForm(UserCreationForm):
         user.address = self.cleaned_data['address']
         user.is_staff = True
         user.is_superuser = True
+        if commit:
+            user.save()
+        return user
+    
+
+class CustomUserChangeForm(UserChangeForm):
+
+    password = forms.CharField(widget=forms.HiddenInput(), required=False)
+
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'phone_number', 'address')
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.phone_number = self.cleaned_data['phone_number']
+        user.address = self.cleaned_data['address']
         if commit:
             user.save()
         return user
